@@ -58,6 +58,7 @@
       integrity="sha256-+uGLJmmTKOqBr+2E6KDYs/NRsHxSkONXFHUL0fy2O/4="
       crossorigin="anonymous"
     />
+    @yield('custom_css')
   </head>
   <!--end::Head-->
   <!--begin::Body-->
@@ -361,6 +362,7 @@
       sparkline3.render();
     </script>
     <!--end::Script-->
+    @yield('scripts')
   </body>
   <!--end::Body-->
 </html>

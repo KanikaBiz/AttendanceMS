@@ -11,7 +11,7 @@
             />
             <!--end::Brand Image-->
             <!--begin::Brand Text-->
-            <span class="brand-text fw-light">AdminLTE 4</span>
+            <span class="brand-text fw-light">Attendance MS</span>
             <!--end::Brand Text-->
           </a>
           <!--end::Brand Link-->
@@ -29,7 +29,7 @@
             >
 
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{route('home')}}" class="nav-link">
                   <i class="nav-icon bi bi-palette"></i>
                   <p>Dashboard</p>
                 </a>
@@ -56,7 +56,7 @@
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a href="./widgets/cards.html" class="nav-link">
+                    <a href="{{route('admin.users.index')}}" class="nav-link">
                       <i class="nav-icon bi bi-circle"></i>
                       <p>Users</p>
                     </a>
