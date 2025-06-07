@@ -7,6 +7,10 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      */
@@ -14,7 +18,9 @@ class UserController extends Controller
     {
         // Fetch all users from the database
         // $users = \App\Models\User::all();
-        $data['users'] = \App\Models\User::all();
+        // $data['users'] = \App\Models\User::all();
+        //  Return user data with roles to views
+        $data['users'] = \App\Models\User::with('roles')->get();
         return view('admin.users.index', $data);
     }
 

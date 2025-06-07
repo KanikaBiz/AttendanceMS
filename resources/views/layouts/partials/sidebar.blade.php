@@ -28,41 +28,67 @@
               data-accordion="false"
             >
 
-              <li class="nav-item">
+              {{-- <li class="nav-item">
                 <a href="{{route('home')}}" class="nav-link">
                   <i class="nav-icon bi bi-palette"></i>
                   <p>Dashboard</p>
                 </a>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-box-seam-fill"></i>
-                  <p>
-                    Manage Users
-                    <i class="nav-arrow bi bi-chevron-right"></i>
-                  </p>
-                </a>
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="./widgets/small-box.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p>Roles</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="./widgets/info-box.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p>Permissions</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="{{route('admin.users.index')}}" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p>Users</p>
-                    </a>
-                  </li>
-                </ul>
-              </li>
+              </li> --}}
+              @auth
+                  @role('Admin')
+                      <li class="nav-item">
+                        <a href="{{route('admin.dashboard')}}" class="nav-link">
+                          <i class="nav-icon bi bi-gear"></i>
+                          <p>Admin Dashboard</p>
+                        </a>
+                      </li>
+
+                       <li class="nav-item">
+                        <a href="#" class="nav-link">
+                        <i class="nav-icon bi bi-box-seam-fill"></i>
+                        <p>
+                            Manage Users
+                            <i class="nav-arrow bi bi-chevron-right"></i>
+                        </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{route('admin.roles.index')}}" class="nav-link">
+                            <i class="nav-icon bi bi-circle"></i>
+                            <p>Roles</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                            <i class="nav-icon bi bi-circle"></i>
+                            <p>Permissions</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('admin.users.index')}}" class="nav-link">
+                            <i class="nav-icon bi bi-circle"></i>
+                            <p>Users</p>
+                            </a>
+                        </li>
+                        </ul>
+                    </li>
+                  @endrole
+
+                  @role('User')
+                      <li class="nav-item">
+                          <a href="{{ route('user.dashboard') }}" class="nav-link">
+                              <i class="nav-icon bi bi-house"></i>
+                              <p>User Dashboard</p>
+                          </a>
+                      </li>
+                  @endrole
+
+              @endauth
+
+
+
+
+
 
 
 
