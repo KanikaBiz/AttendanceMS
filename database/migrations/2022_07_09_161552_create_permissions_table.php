@@ -129,32 +129,33 @@ return new class extends Migration
           'title' => 'user_profile_password_access',
           'group' => 'User'
         ],
-        // Author
+        // Teacher
         [
           'id'    => 22,
-          'title' => 'author_create',
-          'group' => 'Author'
+          'title' => 'teacher_create',
+          'group' => 'Teacher'
         ],
         [
           'id'    => 23,
-          'title' => 'author_edit',
-          'group' => 'Author'
+          'title' => 'teacher_edit',
+          'group' => 'Teacher'
         ],
         [
           'id'    => 24,
-          'title' => 'author_show',
-          'group' => 'Author'
+          'title' => 'teacher_show',
+          'group' => 'Teacher'
         ],
         [
           'id'    => 25,
-          'title' => 'author_delete',
-          'group' => 'Author'
+          'title' => 'teacher_delete',
+          'group' => 'Teacher'
         ],
         [
           'id'    => 26,
-          'title' => 'author_access',
-          'group' => 'Author'
+          'title' => 'teacher_access',
+          'group' => 'Teacher'
         ],
+
 
       ];
       // Permission::insert($permissions);

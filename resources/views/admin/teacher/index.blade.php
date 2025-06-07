@@ -14,14 +14,14 @@
 @endpush
 
 @section('content')
-@section('breadcrumb_title', trans('Manage Author'))
-@section('breadcrumb_pagename', trans('Author List'))
+@section('breadcrumb_title', trans('Manage Teacher'))
+@section('breadcrumb_pagename', trans('Teacher List'))
 
-@section('breadcrumb', trans('Manage Author'))
+@section('breadcrumb', trans('Manage Teacher'))
 <div class="card">
     <div class="card-header">
         <h4 class="mb-0 text-primary"><i class="bx bxs-user me-1 font-22 text-primary"></i>{{ trans('global.list') }}
-            {{ trans('Manage Author') }}
+            {{ trans('Manage Teacher') }}
             @can($prefix . 'create')
                 <button id="addNewObject" type="button" class="btn btn-sm btn-outline-primary px-4 radius-30"
                     style="float: right;" data-toggle="modal" data-target="#crudObjectModal">
@@ -160,7 +160,7 @@
         $('#addNewObject').on('click', function(e) {
             e.preventDefault();
             $('#crudObjectModal').find('.modal-title').html(
-                '{{ trans('global.add') }} {{ trans('Author') }}');
+                '{{ trans('global.add') }} {{ trans('Teacher') }}');
             $('#frmCrudObject').find('#object_id').val('');
             $('#frmCrudObject').find('#btnObjectSave').html(
                 '<i class="fadeIn animated bx bx-plus-circle"></i>&nbsp;{{ trans('global.save') }}'
@@ -226,7 +226,7 @@
             var modal = $('#crudObjectModal');
             var actionUrl = $('#crudRoutePath').val();
             modal.find('.modal-title').html(
-                '{{ trans('global.edit') }} {{ trans('Edit Author') }}');
+                '{{ trans('global.edit') }} {{ trans('Edit Teacher') }}');
             $.get(actionUrl + '/' + object_id + '/edit', function(res) {
                 form.find('#object_id').val(res.data.id);
                 var selectRoles = [];
@@ -286,7 +286,7 @@
             $('#frmCrudObject').find('#btnObjectSave').removeClass('d-none');
             $('#frmCrudObject').find('#btnObjectUpdate').addClass('d-none');
             $('#crudObjectModal').find('.modal-title').html(
-                '{{ trans('global.add') }} {{ trans('Create New Author') }}');
+                '{{ trans('global.add') }} {{ trans('Create New Teacher') }}');
             $('#frmCrudObject').trigger('reset');
         });
 

@@ -40,14 +40,14 @@
                     </a>
                 </li>
             @endcan
-            {{-- Access Author --}}
-            @can('author_access')
+            {{-- Access Teacher --}}
+            @can('teacher_access')
                 <li class="nav-item">
-                    <a href="{{ route('admin.authors.index') }}"
-                        class="nav-link {{ Request::is('admin/authors*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.teachers.index') }}"
+                        class="nav-link {{ Request::is('admin/teachers*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-user"></i>
                         <p>
-                            {{ trans('Manage Authors') }}
+                            {{ trans('Manage Teachers') }}
                         </p>
                     </a>
                 </li>

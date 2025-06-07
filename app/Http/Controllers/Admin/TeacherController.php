@@ -8,13 +8,13 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Gate;
 
-class AuthorController extends Controller
+class TeacherController extends Controller
 {
     public $updateMode = false;
 
-    public $prefix = 'author_';
+    public $prefix = 'teacher_';
 
-    public $crudRoutePath = 'authors';
+    public $crudRoutePath = 'teachers';
 
     public function __construct()
     {
@@ -52,7 +52,7 @@ class AuthorController extends Controller
       //   return $user;
       // });
       // dd($data['users']);
-      return view('admin.author.index', $data);
+      return view('admin.teacher.index', $data);
     }
 
     /**
