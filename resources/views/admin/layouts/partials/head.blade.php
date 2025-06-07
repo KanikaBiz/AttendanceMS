@@ -7,8 +7,10 @@
     <title>@yield('pagetitle', 'User Role Permission')</title>
 
     <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+
     <!-- Font Awesome Icons -->
     @stack('select2')
     @stack('styles')
@@ -16,6 +18,10 @@
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ assetUrl() }}assets/backend/dist/css/adminlte.min.css">
     <style>
+       body {
+          font-family: 'Kantumruy Pro', sans-serif;
+        }
+
         input.ace-switch.ace-switch-yesno:checked::before {
             content: "{{ trans('global.yes') }}";
         }

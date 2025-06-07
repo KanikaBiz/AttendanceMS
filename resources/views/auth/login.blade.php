@@ -6,14 +6,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>User Login</title>
 
-  <!-- Google Font: Source Sans Pro -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+
   <!-- Font Awesome -->
   <link rel="stylesheet" href="{{ assetUrl() }}assets/backend/plugins/fontawesome-free/css/all.min.css">
   <!-- icheck bootstrap -->
   <link rel="stylesheet" href="{{ assetUrl() }}assets/backend/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="{{ assetUrl() }}assets/backend/dist/css/adminlte.min.css">
+  <style>
+    body {
+      font-family: 'Kantumruy Pro', sans-serif;
+    }
+
+    .login-page {
+      background: url('{{ assetUrl() }}assets/backend/dist/img/login-bg.jpg') no-repeat center center fixed;
+      background-size: cover;
+    }
+
+    .login-box {
+      margin-top: 100px;
+    }
+
+    .login-box .card {
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+  </style>
 </head>
 
 <body class="hold-transition login-page">

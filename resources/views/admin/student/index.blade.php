@@ -14,92 +14,92 @@
 @endpush
 
 @section('content')
-@section('breadcrumb_title', trans('Manage Teacher'))
-@section('breadcrumb_pagename', trans('Teacher List'))
+  @section('breadcrumb_title', trans('Manage Teacher'))
+  @section('breadcrumb_pagename', trans('Teacher List'))
 
-@section('breadcrumb', trans('Manage Teacher'))
-<div class="card">
-    <div class="card-header">
-        <h4 class="mb-0 text-primary"><i class="bx bxs-user me-1 font-22 text-primary"></i>{{ trans('global.list') }}
-            {{ trans('Manage Teacher') }}
-            @can($prefix . 'create')
-                <button id="addNewObject" type="button" class="btn btn-sm btn-outline-primary px-4 radius-30"
-                    style="float: right;" data-toggle="modal" data-target="#crudObjectModal">
-                    <i class='bx bxs-plus-square'></i> {{ trans('global.add') }} {{ trans('global.new') }}
-                </button>
-            @endcan
-        </h4>
-    </div>
-    <div class="card-body">
-        <div class="table-responsive">
-            <table id="datatable" class="table table-striped table-bordered">
-                <thead>
-                    <tr>
-                        <th>{{ trans('cruds.user.fields.id') }}</th>
-                        <th>{{ trans('cruds.user.fields.roles') }}</th>
-                        <th>{{ trans('cruds.user.fields.name') }}</th>
-                        <th>{{ trans('cruds.user.fields.username') }}</th>
-                        <th>{{ trans('cruds.user.fields.email') }}</th>
-                        <th>{{ trans('cruds.user.fields.phone_no') }}</th>
-                        <th>{{ trans('cruds.user.fields.created_at') }}</th>
-                        <th>{{ trans('global.status') }}</th>
-                        <th>{{ trans('global.action') }}</th>
-                    </tr>
-                </thead>
-                <tbody id="objectList">
-                    @foreach ($users as $row)
-                        <tr id="tr_object_id_{{ $row->id }}">
-                            <td>{{ $row->id }}</td>
-                            <td>
-                                @foreach ($row->roles as $role)
-                                    <span class="badge bg-dark">{{ $role->title }}</span>
-                                @endforeach
-                            </td>
-                            <td>
-                                @if ($row->profile_image)
-                                    <img src="{{asset(assetUrl().'uploads/user/'.$row->profile_image)}}" alt="image"
-                                        class="rounded-circle" width="50" height="50" onerror="this.onerror=null;this.src='{{ assetUrl() }}assets/backend/dist/img/user2-160x160.jpg';">
-                                @else
-                                    <img src="{{ assetUrl() }}assets/backend/dist/img/user2-160x160.jpg" alt="image"
-                                        class="rounded-circle" width="50" height="50">
-                                @endif
-                                <span class="ml-2">{{ $row->name }}</span>
-                            </td>
-                            <td>
+  @section('breadcrumb', trans('Manage Teacher'))
+  <div class="card">
+      <div class="card-header">
+          <h4 class="mb-0 text-primary"><i class="bx bxs-user me-1 font-22 text-primary"></i>{{ trans('global.list') }}
+              {{ trans('Manage Teacher') }}
+              @can($prefix . 'create')
+                  <button id="addNewObject" type="button" class="btn btn-sm btn-outline-primary px-4 radius-30"
+                      style="float: right;" data-toggle="modal" data-target="#crudObjectModal">
+                      <i class='bx bxs-plus-square'></i> {{ trans('global.add') }} {{ trans('global.new') }}
+                  </button>
+              @endcan
+          </h4>
+      </div>
+      <div class="card-body">
+          <div class="table-responsive">
+              <table id="datatable" class="table table-striped table-bordered">
+                  <thead>
+                      <tr>
+                          <th>{{ trans('cruds.user.fields.id') }}</th>
+                          <th>{{ trans('cruds.user.fields.roles') }}</th>
+                          <th>{{ trans('cruds.user.fields.name') }}</th>
+                          <th>{{ trans('cruds.user.fields.username') }}</th>
+                          <th>{{ trans('cruds.user.fields.email') }}</th>
+                          <th>{{ trans('cruds.user.fields.phone_no') }}</th>
+                          <th>{{ trans('cruds.user.fields.created_at') }}</th>
+                          <th>{{ trans('global.status') }}</th>
+                          <th>{{ trans('global.action') }}</th>
+                      </tr>
+                  </thead>
+                  <tbody id="objectList">
+                      @foreach ($users as $row)
+                          <tr id="tr_object_id_{{ $row->id }}">
+                              <td>{{ $row->id }}</td>
+                              <td>
+                                  @foreach ($row->roles as $role)
+                                      <span class="badge bg-dark">{{ $role->title }}</span>
+                                  @endforeach
+                              </td>
+                              <td>
+                                  @if ($row->profile_image)
+                                      <img src="{{asset(assetUrl().'uploads/user/'.$row->profile_image)}}" alt="image"
+                                          class="rounded-circle" width="50" height="50" onerror="this.onerror=null;this.src='{{ assetUrl() }}assets/backend/dist/img/user2-160x160.jpg';">
+                                  @else
+                                      <img src="{{ assetUrl() }}assets/backend/dist/img/user2-160x160.jpg" alt="image"
+                                          class="rounded-circle" width="50" height="50">
+                                  @endif
+                                  <span class="ml-2">{{ $row->name }}</span>
+                              </td>
+                              <td>
 
-                              {{ $row->username }}</td>
-                            <td>{{ $row->email }}</td>
-                            <td>{{ $row->phone_no }}</td>
-                            <td>{{ date('d-M-Y', strtotime($row->created_at)) }}</td>
-                            <td>
-                                <input id="status" name="status" data-id="{{ $row->id }}"
-                                    {{ $row->status ? 'checked' : '' }} title="Status" type="checkbox"
-                                    class="ace-switch input-lg ace-switch-yesno bgc-green-d2 text-grey-m2" />
-                            </td>
-                            <td>
-                                @include('admin.templates.crudAction')
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <th>{{ trans('cruds.user.fields.id') }}</th>
-                        <th>{{ trans('cruds.user.fields.roles') }}</th>
-                        <th>{{ trans('cruds.user.fields.name') }}</th>
-                        <th>{{ trans('cruds.user.fields.username') }}</th>
-                        <th>{{ trans('cruds.user.fields.email') }}</th>
-                        <th>{{ trans('cruds.user.fields.phone_no') }}</th>
-                        <th>{{ trans('cruds.user.fields.created_at') }}</th>
-                        <th>{{ trans('global.status') }}</th>
-                        <th>{{ trans('global.action') }}</th>
-                    </tr>
-                </tfoot>
-            </table>
-        </div>
-    </div>
-</div>
-@include('admin.user.templates.crudModal')
+                                {{ $row->username }}</td>
+                              <td>{{ $row->email }}</td>
+                              <td>{{ $row->phone_no }}</td>
+                              <td>{{ date('d-M-Y', strtotime($row->created_at)) }}</td>
+                              <td>
+                                  <input id="status" name="status" data-id="{{ $row->id }}"
+                                      {{ $row->status ? 'checked' : '' }} title="Status" type="checkbox"
+                                      class="ace-switch input-lg ace-switch-yesno bgc-green-d2 text-grey-m2" />
+                              </td>
+                              <td>
+                                  @include('admin.templates.crudAction')
+                              </td>
+                          </tr>
+                      @endforeach
+                  </tbody>
+                  <tfoot>
+                      <tr>
+                          <th>{{ trans('cruds.user.fields.id') }}</th>
+                          <th>{{ trans('cruds.user.fields.roles') }}</th>
+                          <th>{{ trans('cruds.user.fields.name') }}</th>
+                          <th>{{ trans('cruds.user.fields.username') }}</th>
+                          <th>{{ trans('cruds.user.fields.email') }}</th>
+                          <th>{{ trans('cruds.user.fields.phone_no') }}</th>
+                          <th>{{ trans('cruds.user.fields.created_at') }}</th>
+                          <th>{{ trans('global.status') }}</th>
+                          <th>{{ trans('global.action') }}</th>
+                      </tr>
+                  </tfoot>
+              </table>
+          </div>
+      </div>
+  </div>
+  @include('admin.user.templates.crudModal')
 @endsection
 
 @push('scripts')
