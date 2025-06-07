@@ -155,6 +155,53 @@ return new class extends Migration
           'title' => 'teacher_access',
           'group' => 'Teacher'
         ],
+        // Student
+        [
+          'id'    => 27,
+          'title' => 'student_create',
+          'group' => 'Student'
+        ],
+        [
+          'id'    => 28,
+          'title' => 'student_edit',
+          'group' => 'Student'
+        ],
+        [
+          'id'    => 29,
+          'title' => 'student_show',
+          'group' => 'Student'
+        ],
+        [
+          'id'    => 30,
+          'title' => 'student_delete',
+          'group' => 'Student'
+        ],
+        [
+          'id'    => 31,
+          'title' => 'student_access',
+          'group' => 'Student'
+        ],
+        // Subject
+        [          'id'    => 32,
+          'title' => 'subject_create',
+          'group' => 'Subject'
+        ],
+        [          'id'    => 33,
+          'title' => 'subject_edit',
+          'group' => 'Subject'
+        ],
+        [          'id'    => 34,
+          'title' => 'subject_show',
+          'group' => 'Subject'
+        ],
+        [          'id'    => 35,
+          'title' => 'subject_delete',
+          'group' => 'Subject'
+        ],
+        [          'id'    => 36,
+          'title' => 'subject_access',
+          'group' => 'Subject'
+        ],
 
 
       ];

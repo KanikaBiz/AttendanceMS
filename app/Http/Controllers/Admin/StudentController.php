@@ -8,13 +8,13 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Gate;
 
-class TeacherController extends Controller
+class StudentController extends Controller
 {
     public $updateMode = false;
 
-    public $prefix = 'teacher_';
+    public $prefix = 'student_';
 
-    public $crudRoutePath = 'teachers';
+    public $crudRoutePath = 'students';
 
     public function __construct()
     {
@@ -37,20 +37,25 @@ class TeacherController extends Controller
         return $next($request);
       });
     }
-
+    /**
+     * Display a listing of the resource.
+     */
     public function index()
     {
-      // abort_if(Gate::denies($this->prefix . 'access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-      $data['prefix'] = $this->prefix;
-      $data['crudRoutePath'] = $this->crudRoutePath;
-      $data['updateMode'] = $this->updateMode;
-      $data['roles'] = Role::pluck('title', 'id');
-      $data['users'] = User::where('id', '>', 1)->whereHas('roles', function ($query) {
-              $query->where('title', 'Teacher');
-          })->latest()->get();
-        // dd($data['users']);
-        return view('admin.teacher.index', $data);
-      }
+        // abort_if(Gate::denies($this->prefix . 'access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        $data['prefix'] = $this->prefix;
+        $data['crudRoutePath'] = $this->crudRoutePath;
+        $data['updateMode'] = $this->updateMode;
+
+        $data['roles'] = Role::pluck('title', 'id');
+        // Fetch users excluding the first user (usually the admin) and role students only
+        $data['users'] = User::where('id', '>', 1)->whereHas('roles', function ($query) {
+            $query->where('title', 'Student');
+        })->latest()->get();
+        // $data['users'] = User::where('id', '>', 1)->latest()->get();
+
+        return view('admin.student.index', $data);
+    }
 
     /**
      * Show the form for creating a new resource.

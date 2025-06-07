@@ -53,6 +53,42 @@
                 </li>
             @endcan
 
+            {{-- Access Student --}}
+            @can('student_access')
+                <li class="nav-item">
+                    <a href="{{ route('admin.students.index') }}"
+                        class="nav-link {{ Request::is('admin/students*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-user"></i>
+                        <p>
+                            {{ trans('Manage Students') }}
+                        </p>
+                    </a>
+                </li>
+            @endcan
+            {{-- Access Class --}}
+            {{-- @can('class_access')
+                <li class="nav-item">
+                    <a href="{{ route('admin.classes.index') }}"
+                        class="nav-link {{ Request::is('admin/classes*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-chalkboard-teacher"></i>
+                        <p>
+                            {{ trans('Manage Classes') }}
+                        </p>
+                    </a>
+                </li>
+            @endcan --}}
+            {{-- Access Subject --}}
+            @can('subject_access')
+                <li class="nav-item">
+                    <a href="{{ route('admin.subjects.index') }}"
+                        class="nav-link {{ Request::is('admin/subjects*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-book"></i>
+                        <p>
+                            {{ trans('Manage Subjects') }}
+                        </p>
+                    </a>
+                </li>
+            @endcan
             <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
             @can('user_management_access')
                 {{-- User Management --}}

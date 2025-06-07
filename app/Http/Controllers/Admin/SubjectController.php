@@ -2,19 +2,17 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Role;
-use App\Models\User;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Gate;
+use App\Http\Controllers\Controller;
 
-class TeacherController extends Controller
+class SubjectController extends Controller
 {
-    public $updateMode = false;
+      public $updateMode = false;
 
-    public $prefix = 'teacher_';
+    public $prefix = 'subject_';
 
-    public $crudRoutePath = 'teachers';
+    public $crudRoutePath = 'subjects';
 
     public function __construct()
     {
@@ -37,20 +35,25 @@ class TeacherController extends Controller
         return $next($request);
       });
     }
-
+    /**
+     * Display a listing of the resource.
+     */
     public function index()
     {
-      // abort_if(Gate::denies($this->prefix . 'access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-      $data['prefix'] = $this->prefix;
-      $data['crudRoutePath'] = $this->crudRoutePath;
-      $data['updateMode'] = $this->updateMode;
-      $data['roles'] = Role::pluck('title', 'id');
-      $data['users'] = User::where('id', '>', 1)->whereHas('roles', function ($query) {
-              $query->where('title', 'Teacher');
-          })->latest()->get();
-        // dd($data['users']);
-        return view('admin.teacher.index', $data);
-      }
+        // abort_if(Gate::denies($this->prefix . 'access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        $data['prefix'] = $this->prefix;
+        $data['crudRoutePath'] = $this->crudRoutePath;
+        $data['updateMode'] = $this->updateMode;
+
+        // Fetch subjects related to classes
+        $data['classes'] = \App\Models\ClassModel::latest()->get();
+        // Fetch all subjects
+        // Assuming you have a Subject model and it has a 'class_id' foreign key
+        // Adjust the model name and relationship as per your application structure
+        $data['subjects'] = \App\Models\Subject::with('class')->latest()->get();
+
+        return view('admin.subject.index', $data);
+    }
 
     /**
      * Show the form for creating a new resource.
