@@ -2,115 +2,181 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+use App\Models\Role;
+use App\Models\User;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Validator;
+use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
+  public $updateMode = false;
+
+  public $prefix = 'user_';
+
+  public $crudRoutePath = 'users';
+
+  public function __construct()
+  {
+    // Apply middleware to check permissions
+    $this->middleware(function ($request, $next) {
+      // Map the prefix and actions to specific Gate permissions
+      $action = $request->route()->getActionMethod();
+      $permission = match ($action) {
+        'index' => $this->prefix . 'access',
+        'store' => $this->prefix . 'create',
+        'edit', 'update', 'changeStatus' => $this->prefix . 'edit',
+        'destroy' => $this->prefix . 'delete',
+        default => null,
+      };
+
+      if ($permission && Gate::denies($permission)) {
+        abort(Response::HTTP_FORBIDDEN, '403, No Permission Authorization');
+      }
+
+      return $next($request);
+    });
+  }
+
+  public function index()
+  {
+    // abort_if(Gate::denies($this->prefix . 'access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+    $data['prefix'] = $this->prefix;
+    $data['crudRoutePath'] = $this->crudRoutePath;
+    $data['updateMode'] = $this->updateMode;
+    $data['roles'] = Role::pluck('title', 'id');
+    $data['users'] = User::where('id', '>', 1)->latest()->get();
+    return view('admin.user.index', $data);
+  }
+
+  public function store(Request $request)
+  {
+    // abort_if(Gate::denies($this->prefix . 'create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+    $status = $request->user_status ? true : false;
+    $rules =  [
+      'name' => ['required', 'string', 'max:255'],
+      'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+      'password' => ['required', 'string', 'min:8', 'confirmed'],
+      'username'  => ['required', 'unique:users'],
+      'phone_no'  => ['required', 'unique:users'],
+      'roles.*' => [
+        'integer',
+      ],
+      'roles' => [
+        'required',
+        'array',
+      ],
+    ];
+    if ($request->hasFile('profile_image')) {
+      $image = $request->file('profile_image');
+      $image_name = $request->username . '-' . uniqid() . '.' . $image->getClientOriginalExtension();
+      $image->move(public_path('uploads/user/'), $image_name);
+    } else {
+      $image_name = $request->old_image ? $request->old_image : null;
     }
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        // Fetch all users from the database
-        // $users = \App\Models\User::all();
-        // $data['users'] = \App\Models\User::all();
-        //  Return user data with roles to views
-        $data['users'] = \App\Models\User::with('roles')->get();
-        return view('admin.users.index', $data);
+    $object_id = $request->object_id;
+    if ($object_id) {
+      unset(
+        $rules['email'],
+        $rules['username'],
+        $rules['phone_no'],
+        $rules['password'],
+      );
+      $type = 'update-object';
+      $success = 'User has been updated successfully!';
+    } else {
+      $type = 'store-object';
+      $success = 'User has been register successfully!';
     }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        // Return the view for creating a new user
-        return view('admin.users.create');
+    $validator = Validator::make($request->all(), $rules);
+    if ($validator->fails()) {
+      $response = [
+        'status' => 400,
+        'error' => $validator->errors()->toArray()
+      ];
+      return response()->json($response);
+    } else {
+      if (!$request->password) {
+        $datas   =   User::updateOrCreate(
+          [
+            'id' => $object_id
+          ],
+          [
+            'name' => $request->name,
+            'username' => $request->username,
+            'phone_no' => $request->phone_no,
+            'email' => $request->email,
+            'status' => $status,
+            'profile_image' => $image_name
+          ]
+        );
+      } else {
+        $datas   =   User::updateOrCreate(
+          [
+            'id' => $object_id
+          ],
+          [
+            'name' => $request->name,
+            'username' => $request->username,
+            'phone_no' => $request->phone_no,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+            'status' => $status,
+            'profile_image' => $image_name
+          ]
+        );
+      }
+      $datas->roles()->sync($request->roles);
+      $response = [
+        'status'   => 200,
+        'type'    => $type,
+        'data'    => $datas,
+        'success' => $success,
+        'html'    => view('admin.user.templates.ajax_tr', [
+          'row' => $datas,
+          'prefix' => $this->prefix,
+          'crudRoutePath' => $this->crudRoutePath
+        ])
+          ->render(),
+      ];
+      return response()->json($response);
     }
+  }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        // dd($request->all());
-        // Validate and store the new user
-        // $validatedData = $request->validate([
-        //     'name' => 'required|string|max:255',
-        //     'email' => 'required|string|email|max:255|unique:users',
-        //     'password' => 'required|string|min:8|confirmed',
-        //     // 'role' => 'required|string|in:admin,user',
-        // ]);
-        // dd($validatedData);
-        // $user = \App\Models\User::create($validatedData);
-        $user = new \App\Models\User();
-        $user->name = $request->input('name');
-        $user->email = $request->input('email');
-        $user->password = bcrypt($request->input('password'));
-        // $user->role = $request->input('role', 'user'); // Default to 'user' if not provided
-        $user->save();
-        // dd($user);
+  public function show($id)
+  {
+    // abort_if(Gate::denies($this->prefix . 'show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+    $user = User::findOrFail($id);
+    $response = [
+      'data'  => $user
+    ];
+    return response()->json($response);
+  }
 
-        return redirect()->route('admin.users.index')->with('success', 'User created successfully.');
-    }
+  public function edit($id)
+  {
+    // abort_if(Gate::denies($this->prefix . 'edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+    $response = [
+      'data'  => User::findOrFail($id)->load('roles')
+    ];
+    return response()->json($response);
+  }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        $user = \App\Models\User::findOrFail($id);
-        return view('admin.users.show', compact('user'));
-    }
+  public function destroy($id)
+  {
+    // abort_if(Gate::denies($this->prefix . 'delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+    $datas = User::find($id)->delete();
+    return response()->json($datas);
+  }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        $user = \App\Models\User::findOrFail($id);
-        return view('admin.users.edit', compact('user'));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        // Validate and update the user
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $id,
-            'password' => 'nullable|string|min:8',
-            // 'role' => 'required|string|in:admin,user',
-        ]);
-
-        $user = \App\Models\User::findOrFail($id);
-        // If password is provided, hash it
-        if ($request->filled('password')) {
-            $validatedData['password'] = bcrypt($request->input('password'));
-        } else {
-            //using current password if not provided
-            unset($validatedData['password']);
-        }
-        $user->update($validatedData);
-
-        return redirect()->route('admin.users.index')->with('success', 'User updated successfully.');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        $user = \App\Models\User::findOrFail($id);
-        $user->delete();
-
-        return redirect()->route('admin.users.index')->with('success', 'User deleted successfully.');
-    }
+  public function changeStatus(Request $request)
+  {
+    // abort_if(Gate::denies($this->prefix . 'edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+    $response = User::find($request->object_id);
+    $response->status = $request->status;
+    $response->save();
+    return response()->json(['success' => 'Status has been change successfully!']);
+  }
 }

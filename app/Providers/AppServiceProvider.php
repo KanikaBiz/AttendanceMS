@@ -2,31 +2,27 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
-    public function register(): void
-    {
-        //
-    }
+  /**
+   * Register any application services.
+   */
+  public function register(): void
+  {
+    //
+  }
 
-    /**
-     * Bootstrap any application services.
-     */
-    public function boot(): void
-    {
-        Gate::before(function ($user, $ability) {
-            return $user->hasRole('Admin') ? true : null;
-        });
-        // Gate::after(function ($user, $ability, $result) {
-        //     if ($result) {
-        //         return true;
-        //     }
-        // });
-    }
+  /**
+   * Bootstrap any application services.
+   */
+  public function boot(): void
+  {
+    Gate::before(function ($user, $ability) {
+      // return $user->hasRole('Super Admin') ? true : null;
+      return $user->id == 1 ? true : null;
+    });
+  }
 }

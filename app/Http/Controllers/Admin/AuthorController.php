@@ -1,0 +1,105 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Models\Role;
+use App\Models\User;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Gate;
+
+class AuthorController extends Controller
+{
+    public $updateMode = false;
+
+    public $prefix = 'author_';
+
+    public $crudRoutePath = 'authors';
+
+    public function __construct()
+    {
+      // Apply middleware to check permissions
+      $this->middleware(function ($request, $next) {
+        // Map the prefix and actions to specific Gate permissions
+        $action = $request->route()->getActionMethod();
+        $permission = match ($action) {
+          'index' => $this->prefix . 'access',
+          'store' => $this->prefix . 'create',
+          'edit', 'update', 'changeStatus' => $this->prefix . 'edit',
+          'destroy' => $this->prefix . 'delete',
+          default => null,
+        };
+
+        if ($permission && Gate::denies($permission)) {
+          abort(Response::HTTP_FORBIDDEN, '403, No Permission Authorization');
+        }
+
+        return $next($request);
+      });
+    }
+
+    public function index()
+    {
+      // abort_if(Gate::denies($this->prefix . 'access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+      $data['prefix'] = $this->prefix;
+      $data['crudRoutePath'] = $this->crudRoutePath;
+      $data['updateMode'] = $this->updateMode;
+      $data['roles'] = Role::pluck('title', 'id');
+      $data['users'] = User::where('id', '>', 1)->latest()->get();
+
+      // $data['users'] = $data['users']->map(function ($user) {
+      //   $user->role = $user->roles->pluck('title')->implode(', ');
+      //   return $user;
+      // });
+      // dd($data['users']);
+      return view('admin.author.index', $data);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        //
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, string $id)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        //
+    }
+}
