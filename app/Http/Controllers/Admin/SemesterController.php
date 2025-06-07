@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Gate;
 
-class SubjectController extends Controller
+class SemesterController extends Controller
 {
     public $updateMode = false;
-    public $prefix = 'subject_';
-    public $crudRoutePath = 'subjects';
+    public $prefix = 'semester_';
+    public $crudRoutePath = 'semesters';
     public function __construct()
     {
       // Apply middleware to check permissions
@@ -32,24 +32,21 @@ class SubjectController extends Controller
         return $next($request);
       });
     }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        // abort_if(Gate::denies($this->prefix . 'access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+         // abort_if(Gate::denies($this->prefix . 'access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $data['prefix'] = $this->prefix;
         $data['crudRoutePath'] = $this->crudRoutePath;
         $data['updateMode'] = $this->updateMode;
 
-        // Fetch subjects related to classes
-        $data['classes'] = \App\Models\ClassModel::latest()->get();
-        // Fetch all subjects
-        // Assuming you have a Subject model and it has a 'class_id' foreign key
-        // Adjust the model name and relationship as per your application structure
-        $data['subjects'] = \App\Models\Subject::with('class')->latest()->get();
+        // Fetch all semesters
+        $data['semesters'] = \App\Models\Semester::latest()->get();
 
-        return view('admin.subject.index', $data);
+        return view('admin.semester.index', $data);
     }
 
     /**
