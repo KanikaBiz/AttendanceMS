@@ -21,7 +21,7 @@
     <!-- /.login-logo -->
     <div class="card card-outline card-primary">
       <div class="card-header text-center">
-        <a href="{{ route('login') }}" class="h1"><b>ចូលប្រើ​</b>បណ្ណាល័យ</a>
+        <a href="{{ route('login') }}" class="h1"><b>ចូលប្រើ​</b>ប្រព័ន្ធ</a>
       </div>
       <div class="card-body">
         <p class="login-box-msg">ចូលប្រើ​ដើម្បីចាប់ផ្តើមគ្រប់គ្រង</p>
