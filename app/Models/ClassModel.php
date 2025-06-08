@@ -13,6 +13,7 @@ class ClassModel extends Model
         'code',
         'description',
         'semester_id',
+        'status',
     ];
 
     public function semester()

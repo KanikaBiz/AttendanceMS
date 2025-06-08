@@ -12,6 +12,9 @@ return new class extends Migration
         Schema::create('years', function (Blueprint $table) {
             $table->id();
             $table->string('name'); // e.g. "2023-2024"
+            $table->string('description')->nullable(); // Optional description
+            //status
+            $table->enum('status', [1, 0])->default(1); // Status of the year
             $table->timestamps();
         });
         // Table Semesters
@@ -19,6 +22,7 @@ return new class extends Migration
             $table->id();
             $table->string('name'); // e.g. "Fall 2023", "Spring 2024"
             $table->foreignId('year_id')->constrained('years')->onDelete('cascade'); // Foreign key to years table
+            $table->enum('status', [1, 0])->default(1); // Status of the semester
             $table->timestamps();
         });
       // Classes with Semesters table
@@ -28,6 +32,7 @@ return new class extends Migration
             $table->string('code')->unique(); // e.g. "MATH101", "WEBSEC"
             $table->string('description')->nullable(); // Optional description
             $table->foreignId('semester_id')->constrained('semesters')->onDelete('cascade'); // Foreign key to semesters table
+            $table->enum('status', [1, 0])->default(1); // Status of the class
             $table->timestamps();
         });
 
@@ -37,6 +42,7 @@ return new class extends Migration
             $table->string('name'); // e.g. "Mathematics", "Web Security"
             $table->string('code')->unique(); // e.g. "MATH", "WEBSEC"
             $table->string('description')->nullable(); // Optional description
+             $table->enum('status', [1, 0])->default(1); // Status of the year
             $table->timestamps();
         });
 
@@ -45,6 +51,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('subject_id')->constrained('subjects')->onDelete('cascade');
             $table->foreignId('teacher_id')->constrained('users')->onDelete('cascade'); // Assuming users table has teacher records
+            $table->enum('status', [1, 0])->default(1); // Status of the subject teacher
             $table->timestamps();
         });
 
@@ -53,6 +60,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('class_id')->constrained('classes')->onDelete('cascade');
             $table->foreignId('subject_teacher_id')->constrained('subject_teachers')->onDelete('cascade');
+            $table->enum('status', [1, 0])->default(1); // Status of the class subject teacher
             $table->timestamps();
         });
 
@@ -61,6 +69,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('class_id')->constrained('classes')->onDelete('cascade');
             $table->foreignId('student_id')->constrained('users')->onDelete('cascade'); // Assuming users table has student records
+            $table->enum('status', [1, 0])->default(1); // Status of the year
             $table->timestamps();
         });
 

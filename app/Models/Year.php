@@ -10,6 +10,8 @@ class Year extends Model
 
     protected $fillable = [
         'name',
+        'description',
+        'status',
     ];
 
     public function semesters()

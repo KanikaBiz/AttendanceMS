@@ -6,22 +6,18 @@ use Illuminate\Database\Eloquent\Model;
 
 class Subject extends Model
 {
-    protected $table = 'subjects';
+    // protected $table = 'subjects';
 
-    protected $fillable = [
-        'name',
-        'code',
-        'description',
-        'class_id',
-    ];
+    // protected $fillable = [
+    //     'name',
+    //     'code',
+    //     'description',
+    //     'status',
+    // ];
+    protected $guarded = [];
 
     public function class()
     {
         return $this->belongsTo(ClassModel::class);
-    }
-
-    public function permissions()
-    {
-        return $this->belongsToMany(Permission::class, 'subject_permissions');
     }
 }
