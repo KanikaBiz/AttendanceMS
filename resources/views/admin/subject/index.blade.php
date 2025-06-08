@@ -176,13 +176,13 @@
 </script>
 
 {{-- Scripts for Save and Update --}}
-<script>
-$(document).ready(function() {
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
+  <script>
+    $(document).ready(function() {
+      $.ajaxSetup({
+          headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
+      });
 
     // Clear Modal Form and set mode
     $('#addNewObject').on('click', function() {
@@ -259,57 +259,57 @@ $(document).ready(function() {
     });
 
     // Delete Object
-  $('body').on('click', '.objectDelete', function(e) {
-        e.preventDefault();
-        var object_id = $(this).data("id");
-        var link = $(this).attr("href");
-        Swal.fire({
-          title: 'Are you sure?',
-          text: "You won't be able to revert this!",
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-          if (result.value) {
-            $.ajax({
-              type: "DELETE",
-              url: link,
-              success: function(data) {
-                $("#tr_object_id_" + object_id).remove();
-                toastr.success(data.success);
-              },
-              error: function(data) {
-                console.log('Error:', data);
-              }
-            });
+    $('body').on('click', '.objectDelete', function(e) {
+          e.preventDefault();
+          var object_id = $(this).data("id");
+          var link = $(this).attr("href");
+          Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+          }).then((result) => {
+            if (result.value) {
+              $.ajax({
+                type: "DELETE",
+                url: link,
+                success: function(data) {
+                  $("#tr_object_id_" + object_id).remove();
+                  toastr.success(data.success);
+                },
+                error: function(data) {
+                  console.log('Error:', data);
+                }
+              });
+            }
+          })
+        });
+
+      // Status Toggle
+      $('body').on('change', '.ace-switch', function(e) {
+        var object_id = $(this).data('id');
+        var status = $(this).prop('checked') == true ? 1 : 0;
+        $.ajax({
+          type: 'GET',
+          dataType: 'JSON',
+          url: '{{ route('admin.subjects.changeStatus') }}',
+          data: {
+            'status': status,
+            'object_id': object_id
+          },
+          success: function(res) {
+            toastr.success(res.success);
+          },
+          error: function(err) {
+            console.log(err);
           }
         })
       });
-
-    // Status Toggle
-    $('body').on('change', '.ace-switch', function(e) {
-      var object_id = $(this).data('id');
-      var status = $(this).prop('checked') == true ? 1 : 0;
-      $.ajax({
-        type: 'GET',
-        dataType: 'JSON',
-        url: '{{ route('admin.subjects.changeStatus') }}',
-        data: {
-          'status': status,
-          'object_id': object_id
-        },
-        success: function(res) {
-          toastr.success(res.success);
-        },
-        error: function(err) {
-          console.log(err);
-        }
-      })
     });
-});
-</script>
+  </script>
 
 
 @endpush

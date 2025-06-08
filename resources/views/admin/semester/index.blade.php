@@ -35,21 +35,24 @@
             </div>
             <div class="modal-body">
                 <form id="crudObjectForm" action="{{ route('admin.semesters.store') }}" method="POST">
-                    @csrf
-                    <input type="hidden" name="id" id="object_id" value="">
+                     {{ csrf_field() }}
+                      <input type="hidden" name="object_id" id="object_id">
+                      <input type="hidden" name="crudRoutePath" id="crudRoutePath" value="{{ $crudRoutePath }}">
                     <div class="form-group">
                         <label for="name">Semester Name</label>
                         <input type="text" name="name" id="name" class="form-control" value="">
                     </div>
-                    <div class="form-group">
-                        <label for="code">Semester Code</label>
-                        <input type="text" name="code" id="code" class="form-control" value="">
-                    </div>
-                    <div class="form-group">
-                        <label for="description">Subject Description</label>
-                        <textarea name="description" id="description" class="form-control"></textarea>
-                    </div>
 
+                    {{-- Get Data from Model Year put into select2 --}}
+                    <div class="form-group">
+                        <label for="year_id">Year</label>
+                        <select name="year_id" id="year_id" class="form-control select2" style="width: 100%;">
+                            <option value="" selected disabled>{{ trans('global.select_year') }}</option>
+                            @foreach ($years as $year)
+                                <option value="{{ $year->id }}">{{ $year->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">
@@ -173,4 +176,141 @@
         });
     });
 </script>
+
+{{-- Save and Update Semester --}}
+
+  <script>
+    $(document).ready(function() {
+      $.ajaxSetup({
+          headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
+      });
+
+    // Clear Modal Form and set mode
+    $('#addNewObject').on('click', function() {
+        $('#crudObjectForm').trigger("reset");
+        $('#crudObjectModalLabel').html('Add New Subject');
+        $('#crudObjectForm').attr('action', '{{ route("admin.semesters.store") }}');
+        $('#crudObjectForm').attr('method', 'POST');
+        $('#object_id').val('');
+        $('#crudObjectModal').modal('show');
+    });
+
+    // Edit Object
+    $(document).on('click', '.objectEdit', function(e) {
+        e.preventDefault();
+        let id = $(this).data('id');
+        $.ajax({
+            url: '{{ route("admin.semesters.index") }}/' + id + '/edit',
+            type: 'GET',
+            success: function(res) {
+                $('#crudObjectModalLabel').html('Edit Subject');
+                $('#crudObjectForm').attr('action', '{{ route("admin.semesters.store") }}');
+                $('#crudObjectForm').attr('method', 'POST');
+                $('#object_id').val(res.id);
+                $('#name').val(res.name);
+                $('#year_id').val(res.year_id).trigger('change');
+                $('#crudObjectModal').modal('show');
+            },
+            error: function(error) {
+                toastr.error('Error fetching subject data');
+            }
+        });
+    });
+
+    // Save/Update Object
+    $('#crudObjectForm').on('submit', function(e) {
+        e.preventDefault();
+        let actionUrl = $(this).attr('action');
+        let formData = new FormData(this);
+
+        $.ajax({
+            url: actionUrl,
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            beforeSend: function() {
+                $(document).find('span.error-text').text('');
+                $('.btn-primary').html('Processing...').prop('disabled', true);
+            },
+            success: function(res) {
+                if (res.status === 400) {
+                    $.each(res.error, function(prefix, val) {
+                        $('span.' + prefix + '_error').text(val[0]);
+                    });
+                } else {
+                    if (res.type === 'store-object') {
+                        $('tbody#objectList').append(res.html);
+                        toastr.success(res.success);
+                    } else {
+                        $("#tr_object_id_" + res.data.id).replaceWith(res.html);
+                        toastr.success(res.success);
+                    }
+                    $('#crudObjectForm').trigger("reset");
+                    $('#crudObjectModal').modal('hide');
+                }
+                $('.btn-primary').html('{{ trans("global.save") }}').prop('disabled', false);
+            },
+            error: function(error) {
+                toastr.error('An error occurred');
+                $('.btn-primary').html('{{ trans("global.save") }}').prop('disabled', false);
+            }
+        });
+    });
+
+    // Delete Object
+    $('body').on('click', '.objectDelete', function(e) {
+          e.preventDefault();
+          var object_id = $(this).data("id");
+          var link = $(this).attr("href");
+          Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+          }).then((result) => {
+            if (result.value) {
+              $.ajax({
+                type: "DELETE",
+                url: link,
+                success: function(data) {
+                  $("#tr_object_id_" + object_id).remove();
+                  toastr.success(data.success);
+                },
+                error: function(data) {
+                  console.log('Error:', data);
+                }
+              });
+            }
+          })
+        });
+
+      // Status Toggle
+      $('body').on('change', '.ace-switch', function(e) {
+        var object_id = $(this).data('id');
+        var status = $(this).prop('checked') == true ? 1 : 0;
+        $.ajax({
+          type: 'GET',
+          dataType: 'JSON',
+          url: '{{ route('admin.semesters.changeStatus') }}',
+          data: {
+            'status': status,
+            'object_id': object_id
+          },
+          success: function(res) {
+            toastr.success(res.success);
+          },
+          error: function(err) {
+            console.log(err);
+          }
+        })
+      });
+    });
+  </script>
+
 @endpush
