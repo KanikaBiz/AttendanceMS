@@ -59,7 +59,7 @@
                     <div class="form-group col-md-2">
                         <label>{{ trans('Day') }} *</label>
                         <select name="subjects[0][day]" class="form-control" required>
-                            <option value="Monday">Monday</option>
+                            <option value="Mon">Mon</option>
                             <option value="Tue">Tue</option>
                             <option value="Wed">Wed</option>
                             <option value="Thu">Thu</option>
@@ -120,7 +120,7 @@
                     <div class="form-group col-md-2">
                         <label>{{ trans('Day') }} *</label>
                         <select name="subjects[${subjectIndex}][day]" class="form-control" required>
-                            <option value="Monday">Monday</option>
+                            <option value="Mon">Mon</option>
                             <option value="Tue">Tue</option>
                             <option value="Wed">Wed</option>
                             <option value="Thu">Thu</option>
