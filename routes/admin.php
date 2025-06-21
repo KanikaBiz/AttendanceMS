@@ -30,9 +30,15 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth']], 
   Route::get('classes/changeStatus', [App\Http\Controllers\Admin\ClassController::class, 'changeStatus'])->name('classes.changeStatus');
   Route::resource('classes', App\Http\Controllers\Admin\ClassController::class)->except('create', 'update');
 
+  Route::resource('class-schedules', App\Http\Controllers\Admin\ClassScheduleController::class);
+  Route::resource('attendances', App\Http\Controllers\Admin\AttendanceController::class);
 
-  Route::get('attendance', [AttendanceController::class, 'index'])->name('attendance.index');
-  Route::post('attendance', [AttendanceController::class, 'store'])->name('attendance.store');
+
+  // Route::get('attendance', [AttendanceController::class, 'index'])->name('attendance.index');
+  // Route::get('attendance/create', [AttendanceController::class, 'create'])->name('attendance.create');
+  // Route::post('attendance', [AttendanceController::class, 'store'])->name('attendance.store');
+
+
   Route::get('attendance/teachers', [AttendanceController::class, 'getTeachers'])->name('attendance.getTeachers');
   Route::get('attendance/subjects', [AttendanceController::class, 'getSubjects'])->name('attendance.getSubjects');
 

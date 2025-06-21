@@ -73,16 +73,18 @@ return new class extends Migration
             $table->timestamps();
         });
 
-      // Table Attendance with class, subject, and student
+
+
         Schema::create('attendances', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('class_id')->constrained('classes')->onDelete('cascade');
-            $table->foreignId('subject_teacher_id')->constrained('class_subject_teachers')->onDelete('cascade');
-            $table->foreignId('student_id')->constrained('users')->onDelete('cascade'); // Assuming users table has student records
-            $table->dateTime('attendance_date'); // Date and time of attendance
-            $table->enum('status', ['present', 'absent', 'late'])->default('present'); // Attendance status
+            $table->foreignId('class_subject_id')->constrained('class_subjects')->onDelete('cascade');
+            $table->foreignId('student_id')->constrained('users')->onDelete('cascade');
+            $table->date('attendance_date');
+            $table->string('status')->default('absent');
+            $table->text('remarks')->nullable();
             $table->timestamps();
         });
+
     }
 
     public function down(): void

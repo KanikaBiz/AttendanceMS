@@ -118,11 +118,24 @@
             {{-- Attendance --}}
             {{-- @can('attendance_access') --}}
                 <li class="nav-item">
-                    <a href="{{ route('admin.attendance.index') }}"
-                        class="nav-link {{ Request::is('admin/attendance*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.attendances.index') }}"
+                        class="nav-link {{ Request::is('admin/attendances*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-calendar-check"></i>
                         <p>
                             {{ trans('Manage Attendance') }}
+                        </p>
+                    </a>
+                </li>
+            {{-- @endcan --}}
+
+            {{-- Class Schedule --}}
+            {{-- @can('class_schedule_access') --}}
+                <li class="nav-item">
+                    <a href="{{ route('admin.class-schedules.index') }}"
+                        class="nav-link {{ Request::is('admin/class-schedules*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-calendar-alt"></i>
+                        <p>
+                            {{ trans('Manage Schedules') }}
                         </p>
                     </a>
                 </li>
