@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\AttendanceController;
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth']], function () {
   Route::get('/', function () {
@@ -15,7 +16,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth']], 
   Route::resource('users', App\Http\Controllers\Admin\UserController::class)->except('create', 'update');
 
   Route::get('teachers/changeStatus', [App\Http\Controllers\Admin\TeacherController::class, 'changeStatus'])->name('teachers.changeStatus');
-  Route::resource('teachers', App\Http\Controllers\Admin\TeacherController::class)->except('create', 'update');
+  Route::resource('teachers', App\Http\Controllers\Admin\TeacherController::class);
 
   Route::get('students/changeStatus', [App\Http\Controllers\Admin\StudentController::class, 'changeStatus'])->name('students.changeStatus');
   Route::resource('students', App\Http\Controllers\Admin\StudentController::class)->except('create', 'update');
@@ -28,4 +29,11 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth']], 
 
   Route::get('classes/changeStatus', [App\Http\Controllers\Admin\ClassController::class, 'changeStatus'])->name('classes.changeStatus');
   Route::resource('classes', App\Http\Controllers\Admin\ClassController::class)->except('create', 'update');
+
+
+  Route::get('attendance', [AttendanceController::class, 'index'])->name('attendance.index');
+  Route::post('attendance', [AttendanceController::class, 'store'])->name('attendance.store');
+  Route::get('attendance/teachers', [AttendanceController::class, 'getTeachers'])->name('attendance.getTeachers');
+  Route::get('attendance/subjects', [AttendanceController::class, 'getSubjects'])->name('attendance.getSubjects');
+
 });

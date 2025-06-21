@@ -156,7 +156,12 @@ class SemesterController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        // Delete the semester
+        $semester = Semester::findOrFail($id);
+        $semester->delete();
+        if(!$semester) {
+            return response()->json(['status' => 400, 'error' => 'Semester not found']);
+        }
     }
     public function changeStatus(Request $request)
     {

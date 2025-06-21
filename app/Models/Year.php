@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Semester;
+use App\Models\ClassModel;
 use Illuminate\Database\Eloquent\Model;
 
 class Year extends Model
@@ -16,11 +18,13 @@ class Year extends Model
 
     public function semesters()
     {
-        return $this->hasMany(Semester::class);
+        return $this->hasMany(Semester::class, 'year_id');
     }
 
     public function classes()
     {
         return $this->hasManyThrough(ClassModel::class, Semester::class);
     }
+
+
 }

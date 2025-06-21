@@ -115,6 +115,19 @@
                 </li>
             @endcan
 
+            {{-- Attendance --}}
+            {{-- @can('attendance_access') --}}
+                <li class="nav-item">
+                    <a href="{{ route('admin.attendance.index') }}"
+                        class="nav-link {{ Request::is('admin/attendance*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-calendar-check"></i>
+                        <p>
+                            {{ trans('Manage Attendance') }}
+                        </p>
+                    </a>
+                </li>
+            {{-- @endcan --}}
+
             <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
             @can('user_management_access')
                 {{-- User Management --}}
