@@ -11,6 +11,8 @@
 @endpush
 
 @section('content')
+@section('pagetitle','Manage Teacher')
+
 @section('breadcrumb_title', trans('Manage Teacher'))
 @section('breadcrumb_pagename', trans('Teacher List'))
 @section('breadcrumb', trans('Teacher List'))
@@ -53,8 +55,12 @@
                           <input id="status" name="status" data-id="{{ $user->id }}" {{ $user->status?'checked':'' }} title="Status" type="checkbox" class="ace-switch input-lg ace-switch-yesno bgc-green-d2 text-grey-m2" />
                         </td>
                         <td>
-                            <a href="{{ route('admin.teachers.edit', $user->id) }}" class="btn btn-sm btn-warning">{{ trans('Edit') }}</a>
-                            <button type="button" class="btn btn-sm btn-danger delete-teacher" data-id="{{ $user->id }}" data-url="{{ route('admin.teachers.destroy', $user->id) }}">{{ trans('Delete') }}</button>
+                            <a href="{{ route('admin.teachers.edit', $user->id) }}" class="btn btn-sm btn-warning">
+                              <i class="fas fa-edit"></i>
+                            </a>
+                            <button type="button" class="btn btn-sm btn-danger delete-teacher" data-id="{{ $user->id }}" data-url="{{ route('admin.teachers.destroy', $user->id) }}">
+                              <i class="fas fa-trash"></i>
+                            </button>
                         </td>
                     </tr>
                 @endforeach

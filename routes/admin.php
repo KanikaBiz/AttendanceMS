@@ -19,7 +19,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth']], 
   Route::resource('teachers', App\Http\Controllers\Admin\TeacherController::class);
 
   Route::get('students/changeStatus', [App\Http\Controllers\Admin\StudentController::class, 'changeStatus'])->name('students.changeStatus');
-  Route::resource('students', App\Http\Controllers\Admin\StudentController::class)->except('create', 'update');
+  Route::resource('students', App\Http\Controllers\Admin\StudentController::class);
 
   Route::get('subjects/changeStatus', [App\Http\Controllers\Admin\SubjectController::class, 'changeStatus'])->name('subjects.changeStatus');
   Route::resource('subjects', App\Http\Controllers\Admin\SubjectController::class)->except('create', 'update');
