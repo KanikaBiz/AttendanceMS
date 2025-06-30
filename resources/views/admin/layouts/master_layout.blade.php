@@ -42,6 +42,35 @@
   <!-- ./wrapper -->
 
   @include('admin.layouts.partials.script')
+
+  <script>
+  function toggleDropdown() {
+      document.getElementById('languageOptions').classList.toggle('show');
+  }
+
+  function selectLanguage(locale, text, flag) {
+      // Update selected display
+      document.querySelector('.selected-language').innerHTML = `
+          <img src="${flag}" alt="">
+          <span>${text}</span>
+          <i class="fas fa-chevron-down"></i>
+      `;
+
+      // Close dropdown
+      document.getElementById('languageOptions').classList.remove('show');
+
+      // Change language
+      changeLanguage(locale);
+  }
+
+  // Close dropdown when clicking outside
+  document.addEventListener('click', function(e) {
+      if (!e.target.closest('.custom-language-dropdown')) {
+          document.getElementById('languageOptions').classList.remove('show');
+      }
+  });
+  </script>
+
 </body>
 
 </html>

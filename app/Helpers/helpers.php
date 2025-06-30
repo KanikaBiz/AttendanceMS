@@ -99,3 +99,39 @@ if (!function_exists('errorImageUrl')) {
     return asset('/images/avatar3.png'); //for using localhost:8000 or 127.0.0.1:8000
   }
 }
+
+//check trans('Key') is set or not create a key for it
+if (!function_exists('checkTrans')) {
+    function checkTrans($key = null, $replace = [], $locale = null)
+    {
+        if (is_null($key)) {
+            return app('translator');
+        } else {
+            $translation = app('translator')->get($key, $replace, $locale);
+            if ($translation === $key) {
+                // If the translation is not found, you can log it or handle it as needed
+                // For example, you can log it to a file or database
+                // Log::warning("Translation key '{$key}' not found.");
+            }
+            return $translation;
+        }
+    }
+}
+
+if (!function_exists('trans')) {
+    function trans($key = null, $replace = [], $locale = null)
+    {
+        if (is_null($key)) {
+            return app('translator');
+        }
+
+        return app('translator')->get($key, $replace, $locale);
+    }
+}
+
+if (!function_exists('__')) {
+    function __($key = null, $replace = [], $locale = null)
+    {
+        return trans($key, $replace, $locale);
+    }
+}

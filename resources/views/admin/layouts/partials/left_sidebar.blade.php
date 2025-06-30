@@ -8,22 +8,6 @@
 
     <!-- Sidebar -->
     <div class="sidebar">
-        <!-- Sidebar user panel (optional) -->
-        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-            <div class="image">
-                @if (auth()->user()->profile_image)
-                    <img src="{{asset(assetUrl().'uploads/user/'.auth()->user()->profile_image)}}" alt="image"
-                        class="rounded-circle" width="50" height="50" onerror="this.onerror=null;this.src='{{ assetUrl() }}assets/backend/dist/img/user2-160x160.jpg';">
-                @else
-                    <img src="{{ assetUrl() }}assets/backend/dist/img/user2-160x160.jpg" alt="image"
-                        class="rounded-circle" width="50" height="50">
-                @endif
-            </div>
-            <div class="info">
-                <a href="#" class="d-block">{{ auth()->user()->name }}</a>
-                <span class="d-block text-muted">{{ auth()->user()->roles->first()->title ?? '' }}</span>
-            </div>
-        </div>
 
         <!-- Sidebar Menu -->
         <ul class="nav nav-pills nav-sidebar flex-column nav-flat" data-widget="treeview" role="menu"
@@ -35,7 +19,7 @@
                         class="nav-link {{ Request::is('admin/dashboard') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>
-                            {{ trans('global.dashboard') }}
+                            {{ trans('Dashboard') }}
                         </p>
                     </a>
                 </li>

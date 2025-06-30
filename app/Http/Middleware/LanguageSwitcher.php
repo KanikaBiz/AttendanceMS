@@ -17,10 +17,16 @@ class LanguageSwitcher
    */
   public function handle(Request $request, Closure $next): Response
   {
-    if (Session::has('locale')) {
-      App::setLocale(Session::get('locale'));
-      //The default Language in Config/App.php is English
-    }
-    return $next($request);
+    // if (Session::has('locale')) {
+    //   App::setLocale(Session::get('locale'));
+    //   //The default Language in Config/App.php is English
+    // }
+    // return $next($request);
+
+      if (session()->has('locale')) {
+            App::setLocale(session('locale'));
+        }
+
+      return $next($request);
   }
 }
